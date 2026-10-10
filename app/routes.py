@@ -3,6 +3,11 @@ from app.services.ai_service import yapay_zeka_yaniti_al
 
 bp = Blueprint('main', __name__)                     ## Blueprint yapısı oluşturma      
 
+@bp.route('/')
+def anasayfa():
+    return "Mono Nutrition Chatbot Çalışıyor"
+
+
 @bp.route('/sohbet', methods=['POST'])               ## Kullanıcıdan gelen post isteğini karşılar, ai_service.py kısmına iletir
 def sohbet_rotasi():
    
@@ -28,4 +33,8 @@ def sohbet_rotasi():
         return jsonify({'hata': 'Sunucu tarafında beklenmeyen bir hata oluştu.'}), 500
 
 
-    
+
+
+
+
+
