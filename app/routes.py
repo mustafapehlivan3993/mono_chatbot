@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.ai_service import yapay_zeka_yaniti_al
+from app.services.ai_service import yapay_zeka_yaniti_al
 
 bp = Blueprint('main', __name__)                     ## Blueprint yapısı oluşturma      
 
