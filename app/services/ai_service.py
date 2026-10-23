@@ -48,7 +48,7 @@ def yapay_zeka_yaniti_al(soru):
                 {'role': 'user', 'content': soru},
             ],
             temperature=0.3,
-            max_tokens=700,
+            max_tokens=1400,
         )
         bot_mesaji = cevap.choices[0].message.content
         if not bot_mesaji or not bot_mesaji.strip():
