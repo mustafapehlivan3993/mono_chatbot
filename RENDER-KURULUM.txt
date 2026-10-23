@@ -1,0 +1,35 @@
+MONO Render kurulumu
+
+Bu deponun Root Directory alanı boş kalmalı (run.py depo kökünde).
+Build: pip install -r requirements.txt
+Start: gunicorn run:app --bind 0.0.0.0:$PORT --timeout 120
+Health check: /health
+
+Ortam değişkenleri:
+GROQ_API_KEY: mevcut Groq anahtarı
+DATABASE_URL: aynı bölgedeki Render PostgreSQL Internal Database URL
+ADMIN_API_KEY: rastgele üretilmiş uzun gizli anahtar; yalnız sunucu tarafında saklanır.
+CORS_ORIGINS: isteğe bağlı virgülle ayrılmış tam origin adresleri.
+Varsayılanlar: https://mustafapehlivan22.wixstudio.com,https://mustafapehlivan22-mononutrition.editor.wix.com
+
+POST /api/leads (veya /api/lead)
+JSON: isim, eposta, telefon, mesaj (zorunlu metinler).
+İsteğe bağlı kaynak: form veya sohbet.
+İsteğe bağlı istekId: UUID. Aynı talep yeniden denenirken aynı UUID gönderilmeli.
+Aynı UUID ve aynı içerik tekrar kayıt oluşturmaz; farklı içerik 409 döndürür.
+Veritabanı yazımı tamamlanmadan başarı dönmez. Bağlantı hatası 503 döner.
+mono_leads tablosu ilk veritabanı işleminde oluşturulur.
+
+GET /api/leads?limit=100&offset=0
+Authorization: Bearer <ADMIN_API_KEY>
+Yanıt: basari, leads, devam. devam true ise offset artırılır.
+Anahtarı Wix sayfa koduna koymayın; Wix backend üzerinden çağırın.
+CORS bir kimlik doğrulama mekanizması değildir.
+
+POST /sohbet
+JSON: soru (1–4000 karakter).
+Yanıt: cevap. Servis hatası 502 döner.
+Sohbet tek başına lead oluşturmaz; Wix akışı bilgileri toplayıp POST /api/leads çağırmalıdır.
+
+Yerel test: python -m unittest discover -s tests -v
+Testlerde DB katmanı mock edilir. Gerçek PostgreSQL kayıt/yeniden okuma testi ayrıca gereklidir.
