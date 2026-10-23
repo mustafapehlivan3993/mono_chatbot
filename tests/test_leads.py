@@ -49,10 +49,10 @@ class LeadTests(unittest.TestCase):
                 self.assertEqual(response.json['leads'], [])
                 self.assertEqual(self.client.get('/api/leads?limit=1000', headers={'Authorization': 'Bearer test-only-key'}).status_code, 400)
 
-    def test_missing_db_and_admin_fail_closed(self):
-        with patch.dict(os.environ, {'ADMIN_API_KEY': '', 'DATABASE_URL': ''}):
-            self.assertEqual(self.client.get('/api/leads').status_code, 503)
-            self.assertEqual(self.client.post('/api/leads', json=self.data).status_code, 503)
+    def test_default_admin_rejects_unknown_key(self):
+        with patch.dict(os.environ, {'ADMIN_API_KEY': ''}):
+            self.assertEqual(self.client.get('/api/leads').status_code, 401)
+            self.assertEqual(self.client.get('/api/leads', headers={'Authorization': 'Bearer wrong'}).status_code, 401)
 
     def test_lead_preflight(self):
         response = self.client.options('/api/leads', headers={

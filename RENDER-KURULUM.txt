@@ -7,8 +7,8 @@ Health check: /health
 
 Ortam değişkenleri:
 GROQ_API_KEY: mevcut Groq anahtarı
-DATABASE_URL: aynı bölgedeki Render PostgreSQL Internal Database URL
-ADMIN_API_KEY: rastgele üretilmiş uzun gizli anahtar; yalnız sunucu tarafında saklanır.
+SQLITE_PATH: isteğe bağlı SQLite dosya yolu. Varsayılan instance/mono.db.
+ADMIN_API_KEY: isteğe bağlı yönetici anahtarı geçersiz kılma. Varsayılan anahtarın yalnız SHA-256 özeti depoda; gerçek anahtar Wix backend modülünde tutulur.
 CORS_ORIGINS: isteğe bağlı virgülle ayrılmış tam origin adresleri.
 Varsayılanlar: https://mustafapehlivan22.wixstudio.com,https://mustafapehlivan22-mononutrition.editor.wix.com
 
@@ -32,4 +32,6 @@ Yanıt: cevap. Servis hatası 502 döner.
 Sohbet tek başına lead oluşturmaz; Wix akışı bilgileri toplayıp POST /api/leads çağırmalıdır.
 
 Yerel test: python -m unittest discover -s tests -v
-Testlerde DB katmanı mock edilir. Gerçek PostgreSQL kayıt/yeniden okuma testi ayrıca gereklidir.
+SQLite testleri geçici dosyada gerçek yazma, yeniden okuma, idempotency ve eşzamanlı kayıt işlemlerini doğrular.
+
+Bu ödev sürümü Render Free geçici diski kullanır. Uyku, yeniden başlatma ve dağıtım sonrası kayıtlar silinebilir. DATABASE_URL/PostgreSQL gerekli değildir.
